@@ -26,8 +26,24 @@ typename enable_if<
   >,
   bool
 >::type
-add(T1 x, T2 y, T3 z) {
-  return false;
+add(const std::vector<T1>& x, const std::vector<T2>& y, std::vector<T3>& z) {
+  //assert( x.size() == y.size() );
+  if ( x.size() != y.size() ) {
+    std::cerr << "ERROR in add(): vectors added must have the same size \n";
+    return false;
+  }
+  //assert(&x!=&z); assert(&y!=&z);
+  if ( (&x==&z) || (&y==&z) ) {
+    std::cerr << "ERROR in add(): input cannot be same as output (vectors passed by reference...) \n";
+    return false;
+  }
+  z.clear();
+  typename std::vector<T1>::const_iterator it_x;
+  typename std::vector<T2>::const_iterator it_y;
+  for (it_x = x.begin(), it_y = y.begin(); it_x < x.end(); it_x++, it_y++) {
+    z.push_back(*it_x + *it_y);
+  }                            
+  return true;
 };
 
 
@@ -43,7 +59,7 @@ int main(int,char*[])
   std::vector<long> y;
   std::vector<long> z;
 
-  // Filling the vectors.
+  // Some code that fills the vectors.
   long myints[] = { -9, 27, 1, 113, 0 };
   char mychars[] = "prout";
   assert(sizeof(myints)/sizeof(long)==(sizeof(mychars)-1)/sizeof(char));
@@ -53,7 +69,12 @@ int main(int,char*[])
     z.push_back(100);
   }
 
+  if (!add(z, y, z)) std::cerr << "problem while adding vectors... \n";
 
+  // Print content of the vector z to the screen.
+  for (std::vector<long>::iterator it_z = z.begin(); it_z != z.end(); it_z++) {
+    std::cout << *it_z << std::endl;
+  }
 
   return 0;
 }
