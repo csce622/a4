@@ -9,13 +9,10 @@
 #include <iostream>
 #include <cassert>
 #include <vector>
-#include <boost/mpl/assert.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/logical.hpp>
 #include <boost/type_traits.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/utility/addressof.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/mpl/logical.hpp>
 
 using namespace boost;
 
