@@ -7,7 +7,10 @@ p1: p1.cpp
 		-o p1 \
 		-I ~/boost/
 
-p2: p2.cpp
+p2: p2.cpp \
+	  xor.hpp \
+		upper.hpp \
+		promote.hpp
 
 	g++ p2.cpp \
 		-o p2 \
