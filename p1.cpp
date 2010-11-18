@@ -1,6 +1,8 @@
 /**
  *
- * CSCE-622: Generic Programming -- Assignment 4
+ * @file p1.cpp
+ *
+ * @brief CSCE-622: Generic Programming -- Assignment 4
  *
  * @author Damien L-G <lebrungd@neo.tamu.edu>
  * @date November 12, 2010
