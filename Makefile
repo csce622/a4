@@ -8,15 +8,18 @@ p1: p1.cpp
 		-I ~/boost/
 
 p2: p2.cpp \
-	  xor.hpp \
-		upper.hpp \
-		promote.hpp
+	xor.hpp \
+	upper.hpp \
+	promote.hpp
 
 	g++ p2.cpp \
 		-o p2 \
 		-I ~/boost/
 
-p3: p3.cpp
+p3: p3.cpp \
+	xor.hpp \
+	upper.hpp \
+	add.hpp
 
 	g++ p3.cpp \
 		-o p3 \
