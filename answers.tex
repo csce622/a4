@@ -1,0 +1,117 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[a4paper]{geometry}
+\geometry{vmargin={2cm,2cm},hmargin={2cm,2cm}}
+
+\setlength{\parindent}{0pt}
+
+\title{CPSC622 -- Assignment 4}
+\date{November 19, 2010}
+\author{Damien Lebrun-Grandi\'e}
+
+\newcommand{\bchar}{\textbf{char}}
+\newcommand{\blong}{\textbf{long}}
+\newcommand{\bint}{\textbf{int}}
+\newcommand{\bfloat}{\textbf{float}}
+\newcommand{\bdouble}{\textbf{double}}
+\newcommand{\complex}{\texttt{complex}}
+\newcommand{\sizeof}{\texttt{sizeof}}
+\newcommand{\isintegral}{\texttt{is\_integral}}
+\newcommand{\iscomplex}{\texttt{is\_complex}}
+
+\begin{document}
+\noindent
+\begin{tabular}{|p{17cm}|}
+\hline
+\begin{center}
+\textbf{ CSCE 622 -- Generic Programming -- Assignment 4 } \\
+\end{center}
+\begin{flushright}
+Assignment subitted by group: \hspace{1.75cm} \, \\
+Damien Lebrun-Grandi\'e (UIN: 220007621) \\
+Varun Raj (UIN: 820003980) \\
+Narottam Jos (UIN: 420005523)
+ \end{flushright} \\
+\hline
+\end{tabular}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{ 1. }
+Please see p1.cpp
+
+We took advantage of the suite of static assertion macros that are provided by the MPL to add error checking to the meta function \texttt{binary} so that invocation with input that contains digits other than 0 or 1 is rejected.
+
+This is achieved by means of the following line:
+\begin{verbatim}
+BOOST_MPL_ASSERT_MSG(N%10<2, INPUT_CONTAINS_DIGITS_OTHER_THAN_0_OR_1, ());
+\end{verbatim}
+
+You can uncomment the line
+\begin{verbatim}
+double dummy = binary<007>::value;
+\end{verbatim}
+in p1.cpp and the compilation will fail.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{ 2. }
+Please see p2.cpp xor.hpp upper.hpp promote.hpp
+
+We wrote a meta function \texttt{promote} that takes two MPL extensible sequences and return a new sequence of the same size, where each elements is the least upper bound according to the partial order defined as:
+
+\vspace{.5cm}
+\begin{scriptsize}
+\begin{tabular}{|l|}
+\hline
+$ \bchar < \bint <\blong < \bfloat $ \\
+$ \bfloat < \bdouble $ \\
+$ \bfloat < \complex\texttt{<}\bfloat\texttt{>} $ \\
+$ \bdouble < \complex\texttt{<}\bdouble\texttt{>} $ \\
+$ \complex\texttt{<}\bfloat\texttt{>} < \complex\texttt{<}\bdouble\texttt{>} $ \\
+\hline
+\end{tabular}
+\end{scriptsize}
+\vspace{.5cm}
+
+The least upper bound between two elements is determined by means of the metafunction \texttt{upper} that uses the BOOST \isintegral\ and \iscomplex\ as well as the C++ operator \sizeof\ based on the information about types summarized in the table that follows.
+
+\vspace{.5cm}
+\begin{scriptsize}
+\begin{tabular}{|r|ccccccc|}
+  \hline
+  \texttt{T}\hspace{.2cm} & \bchar & \bint   & \blong & \bfloat  & \bdouble & \complex\texttt{<}\bfloat \texttt{>} & \complex\texttt{<}\bdouble\texttt{>} \\
+  \hline
+  \isintegral \texttt{<T>}   & true      & true   & true     & false    & false         & false                     & false \\
+  \iscomplex \texttt{<T>} & false     & false & false   & false    & false         & true                       & true \\
+  \sizeof \texttt{(T)}           &  1          &  4       &  8        &  4         &  8              &  8                          &  16 \\
+  \hline
+\end{tabular}
+\end{scriptsize}
+\vspace{.5cm}
+
+The comparison between types is fully tested in upper.hpp by means of MPL assertion macros.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{ 3. }
+Please see p3.cpp greater.hpp add.hpp
+
+We defined a generic function \texttt{add} that takes three \texttt{std::vector}s as its parameters (first two are used as input, the third as output) and performs an element-wise addition of the two input vectors and writes the result into the output vector.
+As specified in the assignment, the element type of each vector can be different, as long as the element type of the output vector is greater than or equal to the element type of the input vectors.
+The meta function \texttt{greater}, combined together with the BOOST \texttt{enable\_if} template, allows us to ensure that the parameter types satisfy this condition.
+
+You can uncomment the line 
+\begin{verbatim}
+add(y, z, x);
+\end{verbatim}
+in p3.cpp and the compilation will fail.
+
+
+
+\end{document}
