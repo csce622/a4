@@ -17,40 +17,10 @@
 #include <boost/mpl/deque.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/equal.hpp>
-#include <boost/mpl/deref.hpp>
-#include <boost/mpl/begin.hpp>
-#include <boost/mpl/next_prior.hpp>
 
 #include "promote.hpp"
 
 using namespace boost;
-
-/*
-/// boucle recopie une sequence ///////////////////
-template <typename InputSequence, typename InputIterator, typename OutputSequence,
-  bool Condition = is_same<typename mpl::end<InputSequence>::type, InputIterator>::value >
-struct bar {
-  typedef typename bar<
-    InputSequence, 
-    typename mpl::next<InputIterator>::type, 
-    typename mpl::insert<
-      OutputSequence,
-      typename mpl::end<OutputSequence>::type, 
-      typename mpl::deref<InputIterator>::type
-    >::type
-  >::type type;
-};
-
-template <typename InputSequence, typename InputIterator, typename OutputSequence>
-struct bar<InputSequence, InputIterator, OutputSequence, true>
-{
-  typedef OutputSequence type;
-};
-
-typedef mpl::vector<double, char, int> enfer;
-typedef bar< enfer::type, mpl::begin<enfer::type>::type, mpl::vector<> >::type damnation;
-BOOST_MPL_ASSERT(( mpl::equal<damnation, enfer> ));
-*/
 
 int main(int,char*[])
 {
@@ -59,12 +29,13 @@ int main(int,char*[])
   std::cout << "######  \n";
 
   // checking example in the assignment
-  typedef mpl::vector<char, double, int> s1;
-  typedef mpl::vector<double, double, long> s2;
-  BOOST_MPL_ASSERT(( mpl::equal< promote<s1, s2>::type, s2 >::type::value ));
-//  BOOST_MPL_ASSERT_MSG(( is_same<int, int >::value ), MARRE_DE_CA,() );
-//  BOOST_MPL_ASSERT_MSG(( mpl::equal<s1, s1 >::type::value ), MARRE_DE_CA,() );
-//  BOOST_MPL_ASSERT_MSG(( is_same<double, mpl::deref<mpl::next<mpl::begin<s1>::type>::type>::type >::type::value ), MARRE_DE_CA,() );
+  BOOST_MPL_ASSERT(( mpl::equal< 
+    promote<
+      mpl::vector<char, double, int>::type, 
+      mpl::vector<double, double, int>::type
+    >::type,
+    mpl::vector<double, double,int>::type
+  > ));
 
   
   // example with a deque
