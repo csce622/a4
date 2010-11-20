@@ -36,7 +36,6 @@ template <
   typename Iterator1, 
   typename Iterator2, 
   typename Output, 
-  typename Position,
   bool Condition = is_same<
     typename mpl::end<Sequence1>::type, 
     Iterator1
@@ -50,13 +49,12 @@ struct __promote {
     typename mpl::next<Iterator2>::type, 
     typename mpl::insert<
       Output, 
-      Position,
+      typename mpl::end<Output>::type,
       typename upper<
         typename mpl::deref<Iterator1>::type,
         typename mpl::deref<Iterator2>::type
       >::type
-    >::type,
-    typename mpl::next<Position>::type
+    >::type
   >::type type;
 };
 
@@ -65,9 +63,8 @@ template <
   typename Sequence2, 
   typename Iterator1, 
   typename Iterator2, 
-  typename Output,
-  typename Position>
-struct __promote<Sequence1, Sequence2, Iterator1, Iterator2, Output, Position, true> {
+  typename Output>
+struct __promote<Sequence1, Sequence2, Iterator1, Iterator2, Output, true> {
   typedef Output type;
 };
 
@@ -80,8 +77,7 @@ struct promote {
     S2, 
     typename mpl::begin<S1>::type, 
     typename mpl::begin<S2>::type, 
-    Output,
-    typename mpl::begin<Output>
+    Output
   >::type type;
 };
 
